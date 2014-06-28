@@ -553,70 +553,22 @@ exports.phantomas = {
   },
 
 
-  executePhantomas : {
-    withoutErrors : function( test ) {
-      var options     = {
-        url          : 'http://whatever.com',
-        numberOfRuns : 5,
-        options      : {}
-      };
-      var done        = function() {};
-      var phantomas   = new Phantomas( grunt, options, done );
+  executePhantomas : function( test ) {
+    var options     = {
+      url          : 'http://whatever.com',
+      numberOfRuns : 5,
+      options      : {},
+      indexPath    : './tmp/'
+    };
+    var done        = function() {};
+    var phantomas   = new Phantomas( grunt, options, done );
 
-      var count             = 0;
-      var filmStripCount    = 0;
-      var filmStripDirCount = 0;
-
-      // mock phantomas execution
-      phantomas.phantomas = function( url, options ) {
-
-        return new Promise( function( resolve ) {
-          test.strictEqual( url , 'http://whatever.com' );
-
-          test.strictEqual( typeof options, 'object' );
-
-          count++;
-
-          if ( options[ 'film-strip' ] ) {
-            filmStripCount++;
-          }
-
-          if ( options[ 'film-strip-dir' ] ) {
-            filmStripDirCount++;
-          }
-          setTimeout( function() {
-            resolve();
-          }, 500 );
-        } );
-      };
-
-      phantomas.executePhantomas()
-                .then( function() {
-                  test.strictEqual( filmStripCount,    1 );
-                  test.strictEqual( filmStripDirCount, 1 );
-                  test.strictEqual( count,             5 );
-
-                  test.done();
-                } );
-    },
-    withErrors : function( test ) {
-      var options     = {};
-      var done        = function() {};
-      var phantomas   = new Phantomas( grunt, options, done );
-
-      // mock phantomas execution
-      phantomas.phantomas = function() {
-        return new Promise( function() {
-          throw new Error( 'Error!' );
-        } );
-      };
-
-      phantomas.executePhantomas()
-                .then( function( results ) {
-                  test.strictEqual( results.length, 0 );
-                  test.done();
-                } );
-    }
+    phantomas.executePhantomas()
+              .then( function() {
+                test.strictEqual( arguments.length,       1 );
+                test.strictEqual( arguments[ 0 ].length , 5 );
+                test.done();
+              } );
   },
 
 
@@ -667,7 +619,8 @@ exports.phantomas = {
 
   formResult : function( test ) {
     var options     = {
-        url : 'http://test.com'
+        url        : 'http://test.com',
+        assertions : {}
       };
     var done        = function() {};
     var phantomas   = new Phantomas( grunt, options, done );
@@ -677,16 +630,18 @@ exports.phantomas = {
           return true;
         },
         value : function() {
-          return [ {
-            metrics   : {
-              metricA       : 10,
-              metricB       : 40,
-              jQueryVersion : '1.9.1'
-            },
-            offenders : {
-              foo : 'bar'
+          return {
+            json : {
+              metrics   : {
+                metricA       : 10,
+                metricB       : 40,
+                jQueryVersion : '1.9.1'
+              },
+              offenders : {
+                foo : 'bar'
+              }
             }
-          } ];
+          };
         }
       },
       {
@@ -694,16 +649,18 @@ exports.phantomas = {
           return true;
         },
         value : function() {
-          return [ {
-            metrics   : {
-              metricA       : 20,
-              metricB       : 50,
-              jQueryVersion : '1.9.1'
-            },
-            offenders : {
-              foo : 'baz'
+          return {
+            json : {
+              metrics   : {
+                metricA       : 20,
+                metricB       : 50,
+                jQueryVersion : '1.9.1'
+              },
+              offenders : {
+                foo : 'baz'
+              }
             }
-          } ];
+          };
         }
       },
       {
@@ -711,16 +668,18 @@ exports.phantomas = {
           return true;
         },
         value : function() {
-          return [ {
-            metrics   : {
-              metricA       : 30,
-              metricB       : 60,
-              jQueryVersion : '1.9.1'
-            },
-            offenders : {
-              foo : 'bar'
+          return {
+            json : {
+              metrics   : {
+                metricA       : 30,
+                metricB       : 60,
+                jQueryVersion : '1.9.1'
+              },
+              offenders : {
+                foo : 'bar'
+              }
             }
-          } ];
+          };
         }
       },
       {

@@ -227,6 +227,12 @@
   fill: rgba( $c-gray, 0.5 );
 }
 
+.p--lineChart--assertion {
+  stroke : $c-red;
+  stroke-width : 2;
+  fill   : none;
+}
+
 .p--lineChart--areaLine {
   fill   : none;
   stroke : $c-green;
@@ -290,11 +296,19 @@
   stroke-width : 2;
 
   cursor : pointer;
-}
 
-.lineChart--circle__highlighted {
-  fill   : $c-purple;
-  stroke : $c-white;
+  &.failed {
+    fill   : $c-red;
+
+    &.highlighted {
+      fill : $c-red;
+    }
+  }
+
+  &.highlighted {
+    fill   : $c-purple;
+    stroke : $c-white;
+  }
 }
 
 .lineChart--gradientBackgroundArea--top {

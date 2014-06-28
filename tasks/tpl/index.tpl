@@ -16,6 +16,14 @@
         <option value="median" selected="selected">Median</option>
         <option value="max">Max</option>
       </select>
+      <% if( failedAssertions.length ) { %>
+        <ul class="p--header--warnings">
+          <% _.each( failedAssertions, function( assertion ) { %>
+            <li><a href="#graph--<%= assertion %>" class="js-scrollLink js-warning">Assertion for <strong><%= assertion %></strong> failed in last run.</a>
+          <% } );%>
+        </ul>
+        <div id="p--header--notification" class="p--header--notification">WARNING! Failed assertions.</div>
+      <% } %>
     </header>
     <main>
       <h2>Stats for <%= url %></h2>
@@ -39,7 +47,7 @@
                     <table class="p--table">
                       <thead class="p--table--head">
                         <th class="p--table--column">Date</th>
-                        <th class="p--table--column"><%= metric %> - <%= ( meta[ metric ] && meta[ metric ].unit ) ? meta[ metric ].unit : '' %></th>
+                        <th class="p--table--column"><strong><%= metric %></strong> - <%= ( meta[ metric ] && meta[ metric ].unit ) ? meta[ metric ].unit : '' %></th>
                       </thead>
                       <tbody class="p--table--body">
                         <% _.each( results, function( result ) { %>
